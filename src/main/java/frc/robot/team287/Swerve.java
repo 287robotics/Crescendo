@@ -1,32 +1,43 @@
 package frc.robot.team287;
 
-import com.ctre.phoenix6.hardware.Pigeon2;
-
 import edu.wpi.first.wpilibj.XboxController;
 
 public class Swerve {
 
-    Wheel wheel1 = new Wheel(15, 1, 2, .3 - .5);
-    Wheel wheel2 = new Wheel(16, 3, 4, .1413 + .5);
-    Wheel wheel3 = new Wheel(17, 7, 8, .0231);
-    Wheel wheel4 = new Wheel(14, 5, 6, .9772 - .5);
+	private XboxController controller;
 
-    // private final Pigeon2 pigeon = new Pigeon2(10);
+	private Wheel wheel1 = new Wheel(15, 1, 2, .3 - .5);
+	private Wheel wheel2 = new Wheel(16, 3, 4, .1413 + .5);
+	private Wheel wheel3 = new Wheel(17, 7, 8, .0231);
+	private Wheel wheel4 = new Wheel(14, 5, 6, .9772 - .5);
 
-    public void setVector(Vec2 vector) {
-        wheel1.setVector(vector);
-        wheel2.setVector(vector);
-        wheel3.setVector(vector);
-        wheel4.setVector(vector);
-    }
+	// private final Pigeon2 pigeon = new Pigeon2(10);
 
-    public void update(XboxController controller) {
-        this.setVector(new Vec2(controller.getRightX(), controller.getRightY()));
+	public Swerve(XboxController controller) {
+		this.controller = controller;
+	}
 
-        wheel1.update();
-        wheel2.update();
-        wheel3.update();
-        wheel4.update();
-    }
+	public void update() {
+		Vec2 translate = new Vec2(controller.getRightX(), controller.getRightY());
+		double rotationOutput = controller.getLeftX();
+
+		// get individual vectors based on rotation and add the translational movement to each.
+		// you may think "adam, what if the vector is longer than 1 and it overdrives the drive motors?"
+		// but worry not carp/keira/vinny/whoever else, Wheel.setVector(Vec2) caps the length to 1
+		Vec2 r1 = new Vec2(rotationOutput, rotationOutput).add(translate);
+		Vec2 r2 = new Vec2(rotationOutput, -rotationOutput).add(translate);
+		Vec2 r3 = new Vec2(-rotationOutput, -rotationOutput).add(translate);
+		Vec2 r4 = new Vec2(-rotationOutput, rotationOutput).add(translate);
+
+		//apply the vectors to the wheels
+		wheel1.setVector(r1);
+		wheel2.setVector(r2);
+		wheel3.setVector(r3);
+		wheel4.setVector(r4);
+		wheel1.update();
+		wheel2.update();
+		wheel3.update();
+		wheel4.update();
+	}
 
 }

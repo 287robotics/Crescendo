@@ -11,89 +11,95 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.team287.Swerve;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+	private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
-  private Swerve swerve;
-  private XboxController controller;
+	private Swerve swerve;
+	private XboxController controller;
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
-    this.controller = new XboxController(0);
-  }
+	/**
+	 * This function is run when the robot is first started up and should be used
+	 * for any
+	 * initialization code.
+	 */
+	@Override
+	public void robotInit() {
+		// Instantiate our RobotContainer. This will perform all our button bindings,
+		// and put our
+		// autonomous chooser on the dashboard.
+		this.controller = new XboxController(0);
+		this.swerve = new Swerve(controller);
+	}
 
-  /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
-  }
+	/**
+	 * This function is called every 20 ms, no matter the mode. Use this for items
+	 * like diagnostics
+	 * that you want ran during disabled, autonomous, teleoperated and test.
+	 *
+	 * <p>
+	 * This runs after the mode specific periodic functions, but before LiveWindow
+	 * and
+	 * SmartDashboard integrated updating.
+	 */
+	@Override
+	public void robotPeriodic() {
+		CommandScheduler.getInstance().run();
+	}
 
-  /** This function is called once each time the robot enters Disabled mode. */
-  @Override
-  public void disabledInit() {}
+	/** This function is called once each time the robot enters Disabled mode. */
+	@Override
+	public void disabledInit() {
+	}
 
-  @Override
-  public void disabledPeriodic() {}
+	@Override
+	public void disabledPeriodic() {
+	}
 
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+	@Override
+	public void autonomousInit() {
+		
+	}
 
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
-  }
+	@Override
+	public void autonomousPeriodic() {
+	}
 
-  @Override
-  public void autonomousPeriodic() {}
+	@Override
+	public void teleopInit() {
+		if (m_autonomousCommand != null) {
+			m_autonomousCommand.cancel();
+		}
+	}
 
-  @Override
-  public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
-    swerve = new Swerve();
-  }
+	@Override
+	public void teleopPeriodic() {
+		swerve.update();
+	}
 
-  @Override
-  public void teleopPeriodic() {
-    swerve.update(controller);
-  }
+	@Override
+	public void testInit() {
+		CommandScheduler.getInstance().cancelAll();
+	}
 
-  @Override
-  public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
-  }
+	@Override
+	public void testPeriodic() {
+	}
 
-  @Override
-  public void testPeriodic() {}
+	@Override
+	public void simulationInit() {
 
-  @Override
-  public void simulationInit() {
+	}
 
-  }
+	@Override
+	public void simulationPeriodic() {
 
-  @Override
-  public void simulationPeriodic() {
-
-  }
+	}
 }

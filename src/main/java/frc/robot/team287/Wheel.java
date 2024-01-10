@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Wheel {
 
+    private static final double MAX_SPEED = 1;
     private static final double NEO_CONVERSION_FACTOR = -13.71;
     private static final double NEO_DRIVE_CONVERSION_FACTOR = 7.36;
 
@@ -23,11 +24,11 @@ public class Wheel {
         this.swivel = new CANSparkMax(swivelId, MotorType.kBrushless);
         this.drive = new CANSparkMax(driveId, MotorType.kBrushless);
         this.controller = new WheelController();
-        this.swivelPIDController = new PIDController(swivel, NEO_CONVERSION_FACTOR, 1, offset);
+        this.swivelPIDController = new PIDController(swivel, NEO_CONVERSION_FACTOR, MAX_SPEED, offset);
     }
 
     public void setVector(Vec2 vector) {
-        this.motorVector = vector;
+        this.motorVector = vector.limitLength(MAX_SPEED);
     }
 
     public void update() {
