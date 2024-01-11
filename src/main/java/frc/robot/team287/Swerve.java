@@ -17,6 +17,17 @@ public class Swerve {
 		this.controller = controller;
 	}
 
+	public void sharedInit() {
+		calibrateAll();
+	}
+
+	public void calibrateAll() {
+		wheel1.calibrate();
+		wheel2.calibrate();
+		wheel3.calibrate();
+		wheel4.calibrate();
+	}
+
 	public void update() {
 		Vec2 translate = new Vec2(controller.getRightX(), controller.getRightY());
 		double rotationOutput = controller.getLeftX();

@@ -27,6 +27,10 @@ public class Wheel {
         this.swivelPIDController = new PIDController(swivel, NEO_CONVERSION_FACTOR, MAX_SPEED, offset);
     }
 
+    public void calibrate() {
+        swivelPIDController.setReferencePositionNoOffset(absEncoder.getAbsolutePosition().getValue());
+    }
+
     public void setVector(Vec2 vector) {
         this.motorVector = vector.limitLength(MAX_SPEED);
     }
