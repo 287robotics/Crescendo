@@ -6,7 +6,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Wheel {
 
-    private static final double MAX_SPEED = 0.2;
+    private static final double MAX_SPEED = 0.1;
     private static final double NEO_CONVERSION_FACTOR = -13.71;
     private static final double NEO_DRIVE_CONVERSION_FACTOR = 7.36;
 
@@ -25,7 +25,7 @@ public class Wheel {
         this.drive = new CANSparkMax(driveId, MotorType.kBrushless);
         this.drive.setInverted(reversed);
         this.controller = new WheelController();
-        this.swivelPIDController = new PIDController(swivel, NEO_CONVERSION_FACTOR, 1, offset);
+        this.swivelPIDController = new PIDController(swivel, NEO_CONVERSION_FACTOR, 0.1, offset);
     }
 
     public double getEncoderRotation() {
@@ -48,7 +48,8 @@ public class Wheel {
         controller.updateInput(motorVector);
         controller.update();
         drive.set(-motorVector.getLength() * controller.wheelSign);//this was originally above the update
-        swivelPIDController.setPosition(-controller.wheelPosition / Math.PI / 2);
+        // drive.set(0);
+        swivelPIDController.setPosition(controller.wheelPosition / Math.PI / 2);
     }
     
 }
