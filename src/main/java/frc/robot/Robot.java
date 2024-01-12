@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,7 +26,8 @@ public class Robot extends TimedRobot {
 
 	private Swerve swerve;
 	private XboxController controller;
-
+	private UsbCamera cam;
+	
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any
@@ -37,6 +40,7 @@ public class Robot extends TimedRobot {
 		// autonomous chooser on the dashboard.
 		this.controller = new XboxController(0);
 		this.swerve = new Swerve(controller);
+		cam = CameraServer.startAutomaticCapture();;
 	}
 
 	/**
@@ -52,6 +56,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotPeriodic() {
 		CommandScheduler.getInstance().run();
+		
+		swerve.robotPeriodic();
 	}
 
 	/** This function is called once each time the robot enters Disabled mode. */
@@ -65,7 +71,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		
+		swerve.sharedInit();
 	}
 
 	@Override
@@ -77,8 +83,9 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+		swerve.sharedInit();
 	}
-
+	
 	@Override
 	public void teleopPeriodic() {
 		swerve.update();
