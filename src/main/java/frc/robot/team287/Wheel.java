@@ -25,7 +25,7 @@ public class Wheel {
         this.drive = new CANSparkMax(driveId, MotorType.kBrushless);
         this.drive.setInverted(reversed);
         this.controller = new WheelController();
-        this.swivelPIDController = new PIDController(swivel, NEO_CONVERSION_FACTOR, 0.1, offset);
+        this.swivelPIDController = new PIDController(swivel, NEO_CONVERSION_FACTOR, 1, offset);
     }
 
     public double getEncoderRotation() {

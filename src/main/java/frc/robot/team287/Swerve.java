@@ -55,9 +55,9 @@ public class Swerve {
 
 	public void update() {
 		Vec2 translate = new Vec2(controller.getRightX(), controller.getRightY());
-		botRotationTarget += controller.getLeftX() * 0.1;
-		rotationController.setRotationTarget(botRotationTarget);
-		double rotationOutput = controller.getAButton() ? rotationController.getRotationOutput() : 0;
+		double rotationOutput = controller.getLeftX();
+		// rotationController.setRotationTarget(botRotationTarget);
+		// double rotationOutput = controller.getAButton() ? rotationController.getRotationOutput() : 0;
 		SmartDashboard.putNumber("rotationOutput", rotationOutput);
 
 		this.botSpeedTarget = translate.getLengthSquared();
